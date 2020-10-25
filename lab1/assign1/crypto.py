@@ -129,8 +129,6 @@ def encrypt_vigenere(plaintext, keyword):
         orderOfKeyword.append(ord(i))
 
     lengthOfKeyword = len(orderOfKeyword)
-    print(orderOfText)
-    print(orderOfKeyword)
 
     for i in range(0, len(orderOfText), 1):
         orderOfEncryptedChar = (
