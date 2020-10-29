@@ -302,7 +302,6 @@ def decrypt_mh(message, private_key):
 
 
 def encrypt_scytale(plaintext, circumference):
-
     columnNumber = circumference
     rowNumber = len(plaintext)//circumference
     matrix = [[0 for x in range(columnNumber)] for y in range(rowNumber)]
@@ -333,5 +332,32 @@ def decrypt_scytale(ciphertext, circumference):
     return decryptedText
 
 
-print(encrypt_scytale('IAMHURTVERYBADLYHELP', 5))
-print(decrypt_scytale('IRYYATBHMVAEHEDLURLP', 5))
+#print(encrypt_scytale('IAMHURTVERYBADLYHELP', 5))
+#print(decrypt_scytale('IRYYATBHMVAEHEDLURLP', 5))
+
+
+def encrypt_railfence(plaintext, num_rails):
+    level = 0
+    rail = [""] * num_rails
+
+    for character in plaintext:
+        if level >= num_rails-1:
+            isAscending = False
+        if level == 0:
+            isAscending = True
+
+        rail[level] += character
+
+        if isAscending:
+            level += 1
+        else:
+            level -= 1
+
+    cipher = "".join(rail)
+    return cipher
+
+
+def decrypt_railfence(ciphertext, num_rails):
+
+
+print(encrypt_railfence('WEAREDISCOVEREDFLEEATONCE', 3))
