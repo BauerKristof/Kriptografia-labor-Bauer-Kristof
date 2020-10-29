@@ -299,3 +299,39 @@ def decrypt_mh(message, private_key):
     """
     # Your implementation here.
     raise NotImplementedError('decrypt_mh is not yet implemented!')
+
+
+def encrypt_scytale(plaintext, circumference):
+
+    columnNumber = circumference
+    rowNumber = len(plaintext)//circumference
+    matrix = [[0 for x in range(columnNumber)] for y in range(rowNumber)]
+    encryptedText = ''
+
+    for i in range(0, len(plaintext)):
+        matrix[i//(rowNumber+1)][i % columnNumber] = plaintext[i]
+
+    for i in range(0, columnNumber):
+        for j in range(0, rowNumber):
+            encryptedText += matrix[j][i]
+
+    return encryptedText
+
+
+def decrypt_scytale(ciphertext, circumference):
+    columnNumber = len(ciphertext)//circumference
+    rowNumber = circumference
+    matrix = [[0 for x in range(columnNumber)] for y in range(rowNumber)]
+    decryptedText = ''
+
+    for i in range(0, len(ciphertext)):
+        matrix[i//(columnNumber)][i % (rowNumber-1)] = ciphertext[i]
+
+    for i in range(0, columnNumber):
+        for j in range(0, rowNumber):
+            decryptedText += matrix[j][i]
+    return decryptedText
+
+
+print(encrypt_scytale('IAMHURTVERYBADLYHELP', 5))
+print(decrypt_scytale('IRYYATBHMVAEHEDLURLP', 5))
