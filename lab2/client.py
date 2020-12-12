@@ -8,6 +8,7 @@ ClientMultiSocket = socket.socket()
 host = '127.0.0.1'
 port = 2004
 clientPublicKey = ''
+clientPrivateKey = ''
 
 print('Waiting for connection response')
 try:
@@ -22,9 +23,11 @@ def getPublicKey():
 
 
 def register():
-    if clientPublicKey == '':
-        print('First you have to get your public key')
-        getPublicKey()
+    if (clientPublicKey == '') and (clientPrivateKey == ''):
+        global clientPrivateKey
+        clientPrivateKey =  Knapsack.generate_private_key(8)
+        global clientPublicKey
+        clientPublicKey = Knapsack.create_public_key(clientPrivateKey)
     else:
         message = 'REGISTER#' + \
             str(ClientMultiSocket.getsockname()[1])+"#"+clientPublicKey
@@ -48,9 +51,11 @@ def processResponse(res):
 def communicate():
     partnerid = input("Type the ID of your chat partner")
 
-    message = 'COMMUNICATE#' + \
-        str(ClientMultiSocket.getsockname()[1])+"#"+partnerid
-    ClientMultiSocket.send(str.encode(message))
+    while True:
+        message = 'COMMUNICATE#' + \
+            str(ClientMultiSocket.getsockname()[1])+"#"+partnerid
+        ClientMultiSocket.send(str.encode(message))
+        recievedMsg = res.decode('utf-8')
 
 
 res = ClientMultiSocket.recv(1024)

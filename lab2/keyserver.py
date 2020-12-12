@@ -18,7 +18,6 @@ class ConnectedClient:
         self.publicKey = publicKey
 
 
-connectedClientsList = []
 registeredClientsList = []
 
 ServerSideSocket = socket.socket()
@@ -36,23 +35,18 @@ ServerSideSocket.listen(5)
 
 def processMessage(client, message):
     if message.find("GETPUBKEY") != -1:
-        method, data = str(message).split("#", 2)
+        method, data, clientid = str(message).split("#", 3)
         print("[REQUEST]Get public key - from Client with ID=" +
               str(client.clientPort))
-        client.setPrivateKey(Knapsack.generate_private_key(8))
-        client.setPublicKey(Knapsack.create_public_key(client.privateKey))
-        print("Client "+str(client.clientPort) +
-              " got public key:"+str(client.publicKey))
 
         isInList = False
-        for i in connectedClientsList:
-            if i.clientPort == client.clientPort:
+        for i in registeredClientsList:
+            if i.clientPort == clientid:
                 isInList = True
+                return "POSTPUBKEY#"+str(i.publicKey)
 
         if isInList == False:
-            connectedClientsList.append(client)
-
-        return "POSTPUBKEY#"+str(client.publicKey)
+            return "POSTPUBKEY#"+"NOTFOUND"
 
     elif message.find("REGISTER") != -1:
         method, clientid, clientpubkey = str(message).split("#", 3)
@@ -63,9 +57,7 @@ def processMessage(client, message):
         for i in registeredClientsList:
             if i.clientPort == client.clientPort:
                 isInList = True
-                client.setPrivateKey(Knapsack.generate_private_key(8))
-                client.setPublicKey(
-                    Knapsack.create_public_key(client.privateKey))
+                client.setPublicKey(clientpubkey)
                 break
 
         if isInList == False:
