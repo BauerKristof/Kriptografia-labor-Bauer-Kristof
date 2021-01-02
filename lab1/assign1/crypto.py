@@ -357,7 +357,4 @@ def encrypt_railfence(plaintext, num_rails):
     return cipher
 
 
-def decrypt_railfence(ciphertext, num_rails):
-
-
 print(encrypt_railfence('WEAREDISCOVEREDFLEEATONCE', 3))
